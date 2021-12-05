@@ -1,0 +1,47 @@
+{
+  "name": "simple-numbers",
+  "version": "1.0.0",
+  "description": "A small, fast JavaScript library for arbitrary-precision decimal arithmetic in javascript notation.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --watch src/ --ext ts --exec 'tsc && node dist/index.js'",
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "arbitrary",
+    "precision",
+    "arithmetic",
+    "big",
+    "number",
+    "decimal",
+    "float",
+    "biginteger",
+    "bigdecimal",
+    "bignumber",
+    "bigint",
+    "bignum"
+  ],
+  "author": "Ando",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AndoGhevian/SimpleNumbers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AndoGhevian/SimpleNumbers/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@jsep-plugin/assignment": "^1.1.0",
+    "@types/big.js": "^6.1.2",
+    "big.js": "^6.1.1",
+    "jsep": "^1.2.0"
+  }
+}
