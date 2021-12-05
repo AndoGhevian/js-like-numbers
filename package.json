@@ -25,7 +25,10 @@
     "bigint",
     "bignum"
   ],
-  "author": "Ando",
+  "author": {
+    "name": "Andranik Ghevondyan",
+    "url": "https://github.com/AndoGhevian"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AndoGhevian/SimpleNumbers.git"
