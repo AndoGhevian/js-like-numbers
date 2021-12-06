@@ -1,4 +1,6 @@
 # Simple-Numbers
+Currently Supported for **ES6** and **higher**
+
 **A small, fast JavaScript library for arbitrary-precision decimal arithmetic in javascript notation.**
 
 [![npm version](https://img.shields.io/npm/v/simple-numbers.svg)](https://www.npmjs.com/package/simple-numbers)
