@@ -88,9 +88,3 @@ export {
   op,
   BigNumber,
 }
-const num1 = op(() => 2 ** 2)
-// const num2 = op(() => 2 ** 2.1)
-console.log(
-  String(num1),
-
-)

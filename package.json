@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "private": false,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest ./__tests__/* --passWithNoTests",
     "dev": "nodemon --watch src/ --ext ts --exec 'tsc && node dist/index.js'",
     "build": "tsc",
     "prepare": "npm run build"
@@ -38,7 +38,10 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "jest": "^27.4.3",
     "nodemon": "^2.0.4",
+    "ts-node": "^10.4.0",
     "typescript": "^4.5.2"
   },
   "dependencies": {

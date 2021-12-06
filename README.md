@@ -146,3 +146,6 @@ num.toPrecision(-1) // Error: Invalid precision provided
 num.toPrecision(1e+6 + 1) // Error: Invalid precision provided
 num.toPrecision(0) // Error: Invalid precision provided
 ```
+
+## License
+[MIT](LICENSE.md)

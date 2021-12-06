@@ -15,20 +15,34 @@ export default class BigNumber {
 
     protected value: Big;
     constructor(init: string | BigNumber) {
-        this.value = typeof init === 'string' ? Big(init) : init.value
+      try {
+        this.value = init instanceof BigNumber ? init.value :  Big(init)
+      }catch {
+        throw new Error('Invalid initialization value provided to BigNumber constructor')
+      }
     }
 
-    [Symbol.toPrimitive](hint: 'number' | 'string' | 'default') {
-        BigNumber.scopeBigIntsReversedArray.push(this.value)
-        switch (hint) {
-            case 'string':
-                return this.value.toString()
-            case 'number':
-                return this.value.valueOf()
-            case 'default':
-            default:
-                return this.value.toString()
-        }
+    // // For ES6 and above transpilation
+    // [Symbol.toPrimitive](hint: 'number' | 'string' | 'default') {
+    //     BigNumber.scopeBigIntsReversedArray.push(this.value)
+    //     switch (hint) {
+    //         case 'string':
+    //             return this.value.toString()
+    //         case 'number':
+    //             return this.value.valueOf()
+    //         case 'default':
+    //         default:
+    //             return this.value.toString()
+    //     }
+    // }
+
+    toString() {
+      BigNumber.scopeBigIntsReversedArray.push(this.value)
+      return this.value.toString()
+    }
+    valueOf() {
+      BigNumber.scopeBigIntsReversedArray.push(this.value)
+      return this.value.toString()
     }
 
     /**
