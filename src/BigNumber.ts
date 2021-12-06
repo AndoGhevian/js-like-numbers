@@ -5,25 +5,44 @@ Big.PE = 1e+6
 Big.DP = 1e+6
 
 export default class BigNumber {
-    static scopeBigIntsReversedArray: Big[]
-    static rightIndex: number
+    protected static scopeBigIntsReversedArray: Big[]
+    protected static rightIndex: number
 
-    private value: Big;
-    constructor(init: string | BigNumber) {
-        this.value = typeof init === 'string' ? Big(init) : init.value
+    protected static resetState() {
+      BigNumber.scopeBigIntsReversedArray = []
+      BigNumber.rightIndex = -1
     }
 
-    [Symbol.toPrimitive](hint: 'number' | 'string' | 'default') {
-        BigNumber.scopeBigIntsReversedArray.push(this.value)
-        switch (hint) {
-            case 'string':
-                return this.value.toString()
-            case 'number':
-                return this.value.valueOf()
-            case 'default':
-            default:
-                return this.value.toString()
-        }
+    protected value: Big;
+    constructor(init: string | BigNumber) {
+      try {
+        this.value = init instanceof BigNumber ? init.value :  Big(init)
+      }catch {
+        throw new Error('Invalid initialization value provided to BigNumber constructor')
+      }
+    }
+
+    // // For ES6 and above transpilation
+    // [Symbol.toPrimitive](hint: 'number' | 'string' | 'default') {
+    //     BigNumber.scopeBigIntsReversedArray.push(this.value)
+    //     switch (hint) {
+    //         case 'string':
+    //             return this.value.toString()
+    //         case 'number':
+    //             return this.value.valueOf()
+    //         case 'default':
+    //         default:
+    //             return this.value.toString()
+    //     }
+    // }
+
+    toString() {
+      BigNumber.scopeBigIntsReversedArray.push(this.value)
+      return this.value.toString()
+    }
+    valueOf() {
+      BigNumber.scopeBigIntsReversedArray.push(this.value)
+      return this.value.toString()
     }
 
     /**

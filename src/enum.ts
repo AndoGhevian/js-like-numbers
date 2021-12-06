@@ -1,6 +1,6 @@
 enum UnaryOperator {
-    Plus = 'u+',
-    Minus = 'u-',
+    Plus = '+',
+    Minus = '-',
 }
 
 enum BinaryOperator {
