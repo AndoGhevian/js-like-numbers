@@ -4,6 +4,17 @@
  */
 
 export default {
+  // A preset that is used as a base for Jest's configuration
+  preset: "ts-jest",
+  // Automatically clear mock calls, instances and results before every test
+  clearMocks: true,
+  // The directory where Jest should output its coverage files
+  coverageDirectory: "coverage",
+  // An array of directory names to be searched recursively up from the requiring module's location
+  moduleDirectories: [
+    "node_modules",
+    "<rootDir>/src"
+  ],
   // "transform": {
   //   "^.+\\.ts?$": "ts-jest",
   // },
@@ -16,17 +27,11 @@ export default {
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "/tmp/jest_8rb",
 
-  // Automatically clear mock calls, instances and results before every test
-  clearMocks: true,
-
   // Indicates whether the coverage information should be collected while executing the test
-  // collectCoverage: true,
+  collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
-
-  // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -68,20 +73,11 @@ export default {
   // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
   // maxWorkers: "50%",
 
-  // An array of directory names to be searched recursively up from the requiring module's location
-  moduleDirectories: [
-    "node_modules",
-    "src"
-  ],
-
   // An array of file extensions your modules use
   // moduleFileExtensions: [
   //   "js",
-  //   "jsx",
   //   "ts",
-  //   "tsx",
-  //   "json",
-  //   "node"
+  //   "json"
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
@@ -95,9 +91,6 @@ export default {
 
   // An enum that specifies notification mode. Requires { notify: true }
   // notifyMode: "failure-change",
-
-  // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -121,9 +114,9 @@ export default {
   // rootDir: "<rootDir>/__tests__",
 
   // A list of paths to directories that Jest should use to search for files in
-  roots: [
-    "<rootDir>/src"
-  ],
+  // roots: [
+  //   "<rootDir>/src"
+  // ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",
@@ -141,7 +134,7 @@ export default {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "node",
+  // testEnvironment: "node",
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},

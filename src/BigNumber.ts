@@ -5,8 +5,8 @@ Big.PE = 1e+6
 Big.DP = 1e+6
 
 export default class BigNumber {
-    protected static scopeBigIntsReversedArray: Big[]
-    protected static rightIndex: number
+    protected static scopeBigIntsReversedArray: Big[] = []
+    protected static rightIndex: number = -1
 
     protected static resetState() {
       BigNumber.scopeBigIntsReversedArray = []
