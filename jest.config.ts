@@ -4,6 +4,9 @@
  */
 
 export default {
+  // "transform": {
+  //   "^.+\\.ts?$": "ts-jest",
+  // },
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -115,7 +118,7 @@ export default {
   // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within
-  // rootDir: undefined,
+  // rootDir: "<rootDir>/__tests__",
 
   // A list of paths to directories that Jest should use to search for files in
   roots: [
@@ -147,9 +150,9 @@ export default {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: [
-    "**/(*.)+test[tj]s?"
-  ],
+  // testMatch: [
+  //   "**/(*.)+test[tj]s?"
+  // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [
@@ -173,9 +176,6 @@ export default {
 
   // A map from regular expressions to paths to transformers
   // transform: undefined,
-  "transform": {
-    "^.+\\.ts?$": "ts-jest",
-  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
