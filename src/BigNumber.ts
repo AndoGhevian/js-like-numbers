@@ -5,10 +5,15 @@ Big.PE = 1e+6
 Big.DP = 1e+6
 
 export default class BigNumber {
-    static scopeBigIntsReversedArray: Big[]
-    static rightIndex: number
+    protected static scopeBigIntsReversedArray: Big[]
+    protected static rightIndex: number
 
-    private value: Big;
+    protected static resetState() {
+      BigNumber.scopeBigIntsReversedArray = []
+      BigNumber.rightIndex = -1
+    }
+
+    protected value: Big;
     constructor(init: string | BigNumber) {
         this.value = typeof init === 'string' ? Big(init) : init.value
     }
