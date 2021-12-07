@@ -5,11 +5,11 @@ Big.PE = 1e+6
 Big.DP = 1e+6
 
 export default class BigNumber {
-    protected static scopeBigIntsReversedArray: Big[] = []
+    protected static opArray: Big[][] = []
     protected static rightIndex: number = -1
 
     protected static resetState() {
-      BigNumber.scopeBigIntsReversedArray = []
+      BigNumber.opArray = []
       BigNumber.rightIndex = -1
     }
 
@@ -24,7 +24,7 @@ export default class BigNumber {
 
     // // For ES6 and above transpilation
     // [Symbol.toPrimitive](hint: 'number' | 'string' | 'default') {
-    //     BigNumber.scopeBigIntsReversedArray.push(this.value)
+    //     BigNumber.opArray.push(this.value)
     //     switch (hint) {
     //         case 'string':
     //             return this.value.toString()
@@ -37,11 +37,17 @@ export default class BigNumber {
     // }
 
     toString() {
-      BigNumber.scopeBigIntsReversedArray.push(this.value)
+      const opsCount = BigNumber.opArray.length
+      if(opsCount) {
+        BigNumber.opArray[opsCount - 1].push(this.value)
+      }
       return this.value.toString()
     }
     valueOf() {
-      BigNumber.scopeBigIntsReversedArray.push(this.value)
+      const opsCount = BigNumber.opArray.length
+      if(opsCount) {
+        BigNumber.opArray[opsCount - 1].push(this.value)
+      }
       return this.value.valueOf()
     }
 

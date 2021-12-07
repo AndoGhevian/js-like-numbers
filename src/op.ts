@@ -11,15 +11,19 @@ import BigNumber from './BigNumber'
 jsep.plugins.register(jsepAssignment as any);
 
 function op(mathOp: Function): any {
-  BigNumber['resetState']()
-  mathOp()
+  try {
+    BigNumber['opArray'].push([])
+    mathOp()
 
-  const returnStatement = getReturnStatement(mathOp)
-  const ast = jsep(returnStatement)
-
-  const resultBig = recursiveTraverse(ast)
-  BigNumber['resetState']()
-  return new BigNumber(resultBig.valueOf())
+    BigNumber['rightIndex'] = -1
+    const returnStatement = getReturnStatement(mathOp)
+    const ast = jsep(returnStatement)
+    console.log(ast)
+    const resultBig = recursiveTraverse(ast)
+    return new BigNumber(resultBig.valueOf())
+  } finally {
+    BigNumber['opArray'].pop()
+  }
 }
 
 function recursiveTraverse(ast: any): Big {
@@ -29,11 +33,12 @@ function recursiveTraverse(ast: any): Big {
       return Big(ast.raw)
     case 'Identifier':
       BigNumber['rightIndex']++
-      const index = BigNumber['scopeBigIntsReversedArray'].length - 1 - BigNumber['rightIndex']
+      const bigNumbersArray = BigNumber['opArray'][BigNumber['opArray'].length - 1]
+      const index = bigNumbersArray.length - 1 - BigNumber['rightIndex']
       if (index < 0) {
         throw new Error(`You can use in return statement only variables initialized with BigNumber value`)
       }
-      return BigNumber['scopeBigIntsReversedArray'][index]
+      return bigNumbersArray[index]
     case 'BinaryExpression':
       ({ left, right } = ast);
       const binaryOperator: BinaryOperator = ast.operator
@@ -85,3 +90,16 @@ function recursiveTraverse(ast: any): Big {
 }
 
 export default op
+
+
+const num3 = op(() => 1)
+op(() => {
+  const num1 = op(() => {
+    const num2 = op(() => 1)
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaassssssssssssssss')
+    console.log(num2.valueOf())
+    return num2
+  })
+
+  return num1 + num3
+}).valueOf()
