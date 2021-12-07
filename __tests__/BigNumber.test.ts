@@ -3,19 +3,23 @@ import BigNumber from 'BigNumber'
 describe('BigNumber constructor', () => {
   describe('Can be instantiated with string and BigNumber arguments', () => {
     it('Should work for string arguments', () => {
-      expect(new BigNumber('1')['value'].valueOf()).toBe('1')
-      expect(String(new BigNumber('1')['value'])).toBe('1')
-      expect(new BigNumber('-0')['value'].valueOf()).toBe('-0')
-      expect(String(new BigNumber('-0')['value'])).toBe('0')
-      expect(new BigNumber('0')['value'].valueOf()).toBe('0')
-      expect(String(new BigNumber('0')['value'])).toBe('0')
+      expect(new BigNumber('1').valueOf()).toBe('1')
+      expect(String(new BigNumber('1'))).toBe('1')
+
+      expect(new BigNumber('-0').valueOf()).toBe('-0')
+      expect(String(new BigNumber('-0'))).toBe('0')
+
+      expect(new BigNumber('0').valueOf()).toBe('0')
+      expect(String(new BigNumber('0'))).toBe('0')
     })
     it('Should work for BigNumber arguments', () => {
       const bigNumber = new BigNumber('1')
       const derivedBigNumber = new BigNumber(bigNumber)
       expect(
-        derivedBigNumber['value'].eq(bigNumber['value'])
-      ).toBe(true)
+        derivedBigNumber.valueOf()
+      ).toEqual(
+        bigNumber.valueOf()
+      )
     })
   })
 })
@@ -74,10 +78,10 @@ describe('BigNumber instance', () => {
   })
 
   describe('Number representation methods', () => {
+    const num = new BigNumber('1.5451')
     describe('toFixed (note: Rounds towards nearest neighbour. If equidistant, rounds away from zero)', () => {
       it(`Returns a string representation of BigNumber in normal notation to a fixed number of decimal places`, () => {
-        const num = new BigNumber('1.5451')
-        expect(num.toFixed()).toBe(String(num))
+        expect(num.toFixed()).toBe(num.valueOf())
         expect(num.toFixed(0)).toBe('2')
         expect(num.toFixed(1)).toBe('1.5')
         expect(num.toFixed(2)).toBe('1.55')
@@ -86,8 +90,7 @@ describe('BigNumber instance', () => {
         expect(num.toFixed(5)).toBe('1.54510')
         expect(num.toFixed(6)).toBe('1.545100')
       })
-      it('Expect integer argument in between 0 to 1e+6', () => {
-        const num = new BigNumber('1.5451')
+      it('Expect integer argument in between 0 to 1e+6 inclusive', () => {
         expect(num.toFixed(0)).toBe('2')
         expect(num.toFixed(1e+6)).toBe('1.5451' + '0'.repeat(1e+6 - 4))
 
@@ -96,6 +99,25 @@ describe('BigNumber instance', () => {
         expect(() => num.toFixed(1e+6 + 1)).toThrow()
       })
     })
+    describe('toPrecision (note: Rounds towards nearest neighbour. If equidistant, rounds away from zero)', () => {
+      it('Returns a string representation of BigNumber to the specified number of significant digits.', () => {
+        expect(num.toPrecision()).toBe(num.valueOf())
+        expect(num.toPrecision(1)).toBe('2')
+        expect(num.toPrecision(2)).toBe('1.5')
+        expect(num.toPrecision(3)).toBe('1.55')
+        expect(num.toPrecision(4)).toBe('1.545')
+        expect(num.toPrecision(5)).toBe('1.5451')
+        expect(num.toPrecision(6)).toBe('1.54510')
+      })
 
+      it('Expect integer argument in between 1 to 1e+6 inclusive', () => {
+        expect(num.toPrecision(1)).toBe('2')
+        expect(num.toPrecision(1e+6)).toBe('1.5451' + '0'.repeat(1e+6 - 5))
+
+        expect(() => num.toPrecision(0)).toThrow()
+        expect(() => num.toPrecision(1.1)).toThrow()
+        expect(() => num.toPrecision(1e+6 + 1)).toThrow()
+      })
+    })
   })
 })

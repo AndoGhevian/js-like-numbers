@@ -42,7 +42,7 @@ export default class BigNumber {
     }
     valueOf() {
       BigNumber.scopeBigIntsReversedArray.push(this.value)
-      return this.value.toString()
+      return this.value.valueOf()
     }
 
     /**

@@ -69,6 +69,20 @@ as a second operand integer number between **-1e+6** to **1e+6** inclusive.
 const num1 = op(() => 2 ** 2) // 4
 const num2 = op(() => 2 ** 2.1) // Error: Invalid exponent: Exponent must be a JavaScript number integer in range - -1e+6 to 1e+6 inclusive
 ```
+When calculating **modulo**, result will be a value of first number **modulo n**, i.e. the integer remainder of dividing it by **n**.
+
+The result will have the same sign as the first operand, and it will match that of JavaScript's % operator (within the limits of its precision) and **BigDecimal's** remainder method.
+
+It will Throw if **n** is zero or otherwise invalid.
+```javascript
+const num1 = op(() => 10 % 6) // 4
+const num2 = op(() => -10 % 6) // -4
+const num2 = op(() => -10 % -6) // -4
+
+const num1 = op(() => -1 % 0.9) // -0.1
+const num2 = op(() => 1 % -0.9) // 0.1
+const num3 = op(() => -0 % 2) // -0
+```
 
 For comparison you have 5 methods on **BigNumber** instances:
 - **eq:**
