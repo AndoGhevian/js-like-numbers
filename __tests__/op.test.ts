@@ -7,20 +7,30 @@ describe('op - arithmetic calculator', () => {
         const notBigNumber = '1'
         expect(op(() => {
             const numInner = new BigNumber('1')
-            return numInner as any + numOuter as any
+            const numInnerOp = op(() => 0)
+            return numInner as any + numOuter + numInnerOp
         }).valueOf()).toEqual('2')
-        expect(() => op(() => notBigNumber + 1)).toThrow('You can use in return statement only variables initialized with BigNumber value')
+        expect(() => op(() => notBigNumber + 1)).toThrow('You can use in return statement only variables initialized with BigNumber values')
     })
-    it('op call body can contain another op calls', () => {
-        const num3 = op(() => 1)
+    
+    it('op call body MUST contain only simple arithmetics (not related to BigNumbers), declarations of BigNumbers, or another op calls', () => {
+        const num = op(() => 1)
         expect(op(() => {
             const num1 = op(() => {
                 const num2 = op(() => 1)
                 return num2
             })
 
-            return num1 + num3
+            return num1 + num
         }).valueOf()).toEqual('2')
+
+        expect(op(() => {
+            const simpleArithmetics = 2 * 12 % 11
+            const bigNumber1 = new BigNumber(simpleArithmetics + '')
+            const bigNumber2 = op(() => bigNumber1 as any + 10)
+
+            return bigNumber1 + bigNumber2
+        }).valueOf()).toEqual('14')
     })
     describe('operating with js arithmetic operations', () => {
         describe('Unary Operators', () => {

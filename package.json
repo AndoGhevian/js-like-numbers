@@ -1,12 +1,12 @@
 {
-  "name": "simple-numbers",
+  "name": "js-like-numbers",
   "version": "1.0.0",
   "description": "A small, fast JavaScript library for arbitrary-precision decimal arithmetic in javascript notation.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "private": false,
   "scripts": {
-    "test": "jest --config ./jest.config.ts  --passWithNoTests __tests__/op.test.ts",
+    "test": "jest --config ./jest.config.ts  --passWithNoTests __tests__/",
     "test-watch": "jest --config ./jest.config.ts  --passWithNoTests --watchAll",
     "dev": "nodemon --watch src/ --ext ts --exec 'tsc && node dist/index.js'",
     "build": "tsc",
@@ -20,11 +20,14 @@
     "number",
     "decimal",
     "float",
+    "js",
+    "jsLike",
     "biginteger",
     "bigdecimal",
     "bignumber",
     "bigint",
-    "bignum"
+    "bignum",
+    "like"
   ],
   "author": {
     "name": "Andranik Ghevondyan",
@@ -48,6 +51,7 @@
   },
   "dependencies": {
     "@jsep-plugin/assignment": "^1.1.0",
+    "@jsep-plugin/comment": "^1.0.2",
     "@types/big.js": "^6.1.2",
     "big.js": "^6.1.1",
     "jsep": "^1.2.0"

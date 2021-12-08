@@ -1,5 +1,6 @@
 import jsep from 'jsep'
-import jsepAssignment from '@jsep-plugin/assignment';
+import jsepAssignment from '@jsep-plugin/assignment'
+import jsepComment from '@jsep-plugin/comment'
 import Big from 'big.js'
 import {
   getReturnStatement,
@@ -8,17 +9,19 @@ import {
 import { BinaryOperator, UnaryOperator } from './enum'
 import BigNumber from './BigNumber'
 
-jsep.plugins.register(jsepAssignment as any);
+jsep.plugins.register(jsepAssignment as any)
+jsep.plugins.register(jsepComment as any)
 
 function op(mathOp: Function): any {
   try {
     BigNumber['opArray'].push([])
-    mathOp()
+    String(mathOp())
 
     BigNumber['rightIndex'] = -1
     const returnStatement = getReturnStatement(mathOp)
     const ast = jsep(returnStatement)
-    console.log(ast)
+
+    console.log((BigNumber['opArray'][0] as any).length)
     const resultBig = recursiveTraverse(ast)
     return new BigNumber(resultBig.valueOf())
   } finally {
@@ -36,7 +39,7 @@ function recursiveTraverse(ast: any): Big {
       const bigNumbersArray = BigNumber['opArray'][BigNumber['opArray'].length - 1]
       const index = bigNumbersArray.length - 1 - BigNumber['rightIndex']
       if (index < 0) {
-        throw new Error(`You can use in return statement only variables initialized with BigNumber value`)
+        throw new Error(`You can use in return statement only variables initialized with BigNumber values`)
       }
       return bigNumbersArray[index]
     case 'BinaryExpression':
@@ -91,15 +94,15 @@ function recursiveTraverse(ast: any): Big {
 
 export default op
 
-
-const num3 = op(() => 1)
-op(() => {
-  const num1 = op(() => {
-    const num2 = op(() => 1)
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaassssssssssssssss')
-    console.log(num2.valueOf())
-    return num2
-  })
-
-  return num1 + num3
-}).valueOf()
+const num1 = op(() => 1)
+const num2 = op(() => (num1 + num1) ** 2)
+const simpleMath = 16 + 2 / 2
+const num3 = new BigNumber(simpleMath + '')
+const result = op(function f() {
+  // const bigNumberStringCasting = num3.toString() // This is not allowed, it can lead to logical errors.
+  return num2 + 12 + num1 - (num3 as any) // 0
+})
+console.log(String(num1))
+console.log(String(num2))
+console.log(String(num3))
+console.log(String(result))
