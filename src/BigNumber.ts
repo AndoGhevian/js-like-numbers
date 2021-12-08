@@ -8,11 +8,6 @@ export default class BigNumber {
     protected static opArray: Big[][] = []
     protected static rightIndex: number = -1
 
-    protected static resetState() {
-      BigNumber.opArray = []
-      BigNumber.rightIndex = -1
-    }
-
     protected value: Big;
     constructor(init: string | BigNumber) {
       try {
@@ -21,20 +16,6 @@ export default class BigNumber {
         throw new Error('Invalid initialization value provided to BigNumber constructor')
       }
     }
-
-    // // For ES6 and above transpilation
-    // [Symbol.toPrimitive](hint: 'number' | 'string' | 'default') {
-    //     BigNumber.opArray.push(this.value)
-    //     switch (hint) {
-    //         case 'string':
-    //             return this.value.toString()
-    //         case 'number':
-    //             return this.value.valueOf()
-    //         case 'default':
-    //         default:
-    //             return this.value.toString()
-    //     }
-    // }
 
     toString() {
       const opsCount = BigNumber.opArray.length

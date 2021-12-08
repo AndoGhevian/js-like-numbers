@@ -2,7 +2,7 @@ import Big from 'big.js'
 import { TFunction } from "./types"
 import { BinaryOperator, UnaryOperator } from "./enum"
 
-const returnRegex = /[^]*return ([^]+?)(?:[;\s]*)\}$/;
+const returnRegex = /[^]*return ([^]+?)(?:(?:\/\/|\/\*)[^]*|(?:[;\s])*)\}$/;
 const arrowReturnRegex = /[^]* => ([^]*)/;
 
 function getReturnStatement(func: TFunction | Function) {
@@ -15,12 +15,12 @@ function getReturnStatement(func: TFunction | Function) {
     } else {
         returnMatch = funcStr.match(arrowReturnRegex)
     }
-
+    console.log(returnMatch)
     if (returnMatch) {
         return returnMatch[1]
     }
     return ''
-}
+}/*asda */
 
 function performMath(unaryOperator: UnaryOperator, operand: string | Big): Big
 function performMath(operand1: string | Big, operand2: string | Big, binaryOperator: BinaryOperator): Big
@@ -81,21 +81,3 @@ export {
     getReturnStatement,
     performMath,
 };
-
-declare const op: any
-
-console.log('aaaaaaaaaaaaaaaaaaaaa')
-console.log(
-    (() => {
-        const num1 = op(() => {
-            const num2 = op(() => 1)
-            console.log('String(num2)')
-            console.log(String(num2))
-            return num2
-        })
-        console.log('String(num1)')
-        console.log(String(num1))
-
-        return 1+222
-    }).toString().match(returnRegex)
-)

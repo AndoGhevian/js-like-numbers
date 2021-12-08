@@ -1,25 +1,25 @@
-# Simple-Numbers
+# JS-Like-Numbers
 Currently Supported for **ES6** and **higher**
 
 **A small, fast JavaScript library for arbitrary-precision decimal arithmetic in javascript notation.**
 
-[![npm version](https://img.shields.io/npm/v/simple-numbers.svg)](https://www.npmjs.com/package/simple-numbers)
-[![npm downloads](https://img.shields.io/npm/dw/simple-numbers)](https://www.npmjs.com/package/simple-numbers)
+[![npm version](https://img.shields.io/npm/v/js-like-numbers.svg)](https://www.npmjs.com/package/js-like-numbers)
+[![npm downloads](https://img.shields.io/npm/dw/js-like-numbers)](https://www.npmjs.com/package/js-like-numbers)
 
 ## Install
-`$ npm install simple-numbers`
+`$ npm install js-like-numbers`
 
 ## Usage
 CommonJS:
 
 ```javascript
-const { op } = require('simple-numbers')
+const { op } = require('js-like-numbers')
 ```
 
 ES module:
 
 ```javascript
-import { op } from 'simple-numbers'
+import { op } from 'js-like-numbers'
 ```
 
 You need to pass to **op** a function with returned aritmetic operation or a number
@@ -44,23 +44,26 @@ const val = op(function f() {
 
 console.log(String(val)) // 449923381
 ```
-
-The only requirements is that your return statements consists of arithmetic
-operations and include only identifiers (variables) refering to **BigNumbers** as values:
+**Requirement**: Your return statements **MUST** consists of arithmetic
+operations and include **ONLY** identifiers (variables) refering to **BigNumbers** as values:
 ```javascript
 const val = op(() => 1)
 const result1 = op(() => (1 + val * 10) / val ** (2 + val)) // Is Correct
 
 const incorrectVal = 1
-const result2 = op(() => 1 + incorrectVal) // Error: You can use in return statement only variables initialized with BigNumber value
+const result2 = op(() => 1 + incorrectVal) // Error: You can use in return statement only variables initialized with BigNumber values
 ```
-Your function body (except return statements) can contain any synchronous logic:
+**Requirement**: **op** call body **MUST** contain only simple arithmetics (not related to **BigNumbers**), declarations of **BigNumbers**, or another **op** calls.
+It **MUST** not contain any type castings related to **BigNumbers**. 
 ```javascript
 const num1 = op(() => 1)
 const result = op(function f() {
   const num2 = op(() => (num1 + num1) ** 2)
+  const simpleMath = 16 + 2 / 2
+  const num3 = new BigNumber(simpleMath + '')
+  // const bigNumberStringCasting = num3.toString() // This is not allowed, it can lead to logical errors.
   
-  return num2 + 12 + num1 // 17
+  return num2 + 12 + num1 + (-num3) // 0
 })
 ```
 When you use **exponentiation** operation **(\*\*)**, be sure to pass
