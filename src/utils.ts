@@ -1,26 +1,27 @@
 import Big from 'big.js'
 import { TFunction } from "./types"
 import { BinaryOperator, UnaryOperator } from "./enum"
+import { parseScript } from 'esprima'
 
-const returnRegex = /[^]*return ([^]+?)(?:(?:\/\/|\/\*)[^]*|(?:[;\s])*)\}$/;
-const arrowReturnRegex = /[^]* => ([^]*)/;
+function getReturnStatementAst(func: TFunction) {
+    const funcStr = `(${String(func)})`
+    const { body: [ast] } = parseScript(funcStr)
+    let funcAst: any
+    switch (ast.type) {
+        case 'ExpressionStatement':
+            funcAst = ast.expression;
+            break
+        case 'FunctionDeclaration':
+            funcAst = ast;
+    }
 
-function getReturnStatement(func: TFunction | Function) {
-    if (typeof func !== 'function') return '';
-    const funcStr = String(func);
-    const hasReturn = funcStr.indexOf('return ') !== -1
-    let returnMatch: any;
-    if (hasReturn) {
-        returnMatch = funcStr.match(returnRegex)
-    } else {
-        returnMatch = funcStr.match(arrowReturnRegex)
+    if (funcAst.body.type === 'BlockStatement') {
+        const { body: funcBodyAst } = funcAst.body
+        const returnSTatementAst = funcBodyAst.find((statement: any) => statement.type === 'ReturnStatement')
+        return returnSTatementAst.argument
     }
-    console.log(returnMatch)
-    if (returnMatch) {
-        return returnMatch[1]
-    }
-    return ''
-}/*asda */
+    return funcAst.body
+}
 
 function performMath(unaryOperator: UnaryOperator, operand: string | Big): Big
 function performMath(operand1: string | Big, operand2: string | Big, binaryOperator: BinaryOperator): Big
@@ -78,6 +79,6 @@ function performMath(operand1: any, operand2: any, operator?: any): any {
 }
 
 export {
-    getReturnStatement,
+    getReturnStatementAst,
     performMath,
 };

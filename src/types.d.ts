@@ -1,1 +1,1 @@
-export type TFunction = (...args: any[]) => any
+export type TFunction = (...args: any) => any

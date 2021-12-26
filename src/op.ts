@@ -3,52 +3,53 @@ import jsepAssignment from '@jsep-plugin/assignment'
 import jsepComment from '@jsep-plugin/comment'
 import Big from 'big.js'
 import {
-  getReturnStatement,
+  getReturnStatementAst,
   performMath,
 } from './utils'
 import { BinaryOperator, UnaryOperator } from './enum'
 import BigNumber from './BigNumber'
+import { TFunction } from 'types'
 
 jsep.plugins.register(jsepAssignment as any)
 jsep.plugins.register(jsepComment as any)
 
-function op(mathOp: Function): any {
+function op(mathOp: TFunction): any {
   try {
     BigNumber['opArray'].push([])
     String(mathOp())
 
-    BigNumber['rightIndex'] = -1
-    const returnStatement = getReturnStatement(mathOp)
-    const ast = jsep(returnStatement)
+    BigNumber['rightIndexArray'].push(-1)
+    const ast = getReturnStatementAst(mathOp)
+    console.log(ast)
 
-    console.log((BigNumber['opArray'][0] as any).length)
     const resultBig = recursiveTraverse(ast)
     return new BigNumber(resultBig.valueOf())
   } finally {
     BigNumber['opArray'].pop()
+    BigNumber['rightIndexArray'].pop()
   }
 }
 
 function recursiveTraverse(ast: any): Big {
+  const rightIndexCount = BigNumber['rightIndexArray'].length
   let left: any, right: any
   switch (ast.type) {
     case 'Literal':
       return Big(ast.raw)
     case 'Identifier':
-      BigNumber['rightIndex']++
+      BigNumber['rightIndexArray'][rightIndexCount - 1]++
       const bigNumbersArray = BigNumber['opArray'][BigNumber['opArray'].length - 1]
-      const index = bigNumbersArray.length - 1 - BigNumber['rightIndex']
-      if (index < 0) {
-        throw new Error(`You can use in return statement only variables initialized with BigNumber values`)
-      }
+      const index = bigNumbersArray.length - 1 - BigNumber['rightIndexArray'][rightIndexCount - 1]
+      if (index < 0) throw new Error(`You can use in return statement only variables initialized with BigNumber values`)
       return bigNumbersArray[index]
     case 'BinaryExpression':
       ({ left, right } = ast);
+      console.log('left')
+      console.log(left)
+      console.log()
       const binaryOperator: BinaryOperator = ast.operator
-      const isValidOperator = (Object as any).values(BinaryOperator).includes(binaryOperator)
-      if (!isValidOperator) {
-        break
-      }
+      const isValidOperator = Object.values(BinaryOperator).includes(binaryOperator)
+      if (!isValidOperator) break
       return performMath(
         recursiveTraverse(left),
         recursiveTraverse(right),
@@ -93,16 +94,3 @@ function recursiveTraverse(ast: any): Big {
 }
 
 export default op
-
-const num1 = op(() => 1)
-const num2 = op(() => (num1 + num1) ** 2)
-const simpleMath = 16 + 2 / 2
-const num3 = new BigNumber(simpleMath + '')
-const result = op(function f() {
-  // const bigNumberStringCasting = num3.toString() // This is not allowed, it can lead to logical errors.
-  return num2 + 12 + num1 - (num3 as any) // 0
-})
-console.log(String(num1))
-console.log(String(num2))
-console.log(String(num3))
-console.log(String(result))

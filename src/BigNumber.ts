@@ -6,29 +6,59 @@ Big.DP = 1e+6
 
 export default class BigNumber {
     protected static opArray: Big[][] = []
-    protected static rightIndex: number = -1
+    protected static rightIndexArray: number[] = []
 
     protected value: Big;
     constructor(init: string | BigNumber) {
       try {
         this.value = init instanceof BigNumber ? init.value :  Big(init)
-      }catch {
+      } catch {
         throw new Error('Invalid initialization value provided to BigNumber constructor')
       }
     }
 
+    /**
+     * Cast **BigNumber** to primitive.
+     * 
+     * **WARNING:**
+     * - In **op** functions you **MUST** use this method to case **BigNumber** to primitive (string/number).
+     * - **DO NOT** peform any operations that lead to **to primitive (string/number)** castings of **BigNumbers** in **op** without this method.
+     * @param to 'string' or 'number'
+     * @defualt 'string'
+     * @returns string or number respectively
+     */
+    cast<T extends 'string' | 'number'>(to?: T) : T extends 'string' 
+      ? string
+      : number {
+        switch(to) {
+          case 'number':
+            return this.value.valueOf() as string & number
+          case 'string':
+          case undefined:
+            return this.value.toString() as string & number
+        }
+        throw new Error('Invalid casting target provided')
+    }
+    
+    /**
+     * **WARNING:**
+     * - **DO NOT** use this method (implicitly/explicitly) to cast **BigNumbers** to strings in **op** functions.
+     * - Instead in **op** functions you **MUST** use **BigNumber.cast** method.
+     */
     toString() {
       const opsCount = BigNumber.opArray.length
-      if(opsCount) {
-        BigNumber.opArray[opsCount - 1].push(this.value)
-      }
+      if(opsCount) BigNumber.opArray[opsCount - 1].push(this.value)
       return this.value.toString()
     }
+
+    /**
+     * **WARNING:**
+     * - **DO NOT** use this method (implicitly/explicitly) to cast **BigNumbers** to numbers in **op** functions.
+     * - Instead in **op** functions you **MUST** use **BigNumber.cast** method.
+     */
     valueOf() {
       const opsCount = BigNumber.opArray.length
-      if(opsCount) {
-        BigNumber.opArray[opsCount - 1].push(this.value)
-      }
+      if(opsCount) BigNumber.opArray[opsCount - 1].push(this.value)
       return this.value.valueOf()
     }
 
@@ -40,7 +70,7 @@ export default class BigNumber {
         try {
             return this.value.toFixed(decimalPlaces)
         } catch {
-            throw new Error('Invalid argument decimalPlaces provided')
+            throw new Error('Invalid decimalPlaces argument provided')
         }
     }
 
@@ -52,7 +82,7 @@ export default class BigNumber {
         try {
             return this.value.toPrecision(precision)
         } catch {
-            throw new Error('Invalid precision provided')
+            throw new Error('Invalid precision argument provided')
         }
     }
 
