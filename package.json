@@ -35,10 +35,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AndoGhevian/SimpleNumbers.git"
+    "url": "https://github.com/AndoGhevian/js-like-numbers.git"
   },
   "bugs": {
-    "url": "https://github.com/AndoGhevian/SimpleNumbers/issues"
+    "url": "https://github.com/AndoGhevian/js-like-numbers/issues"
   },
   "license": "MIT",
   "devDependencies": {
