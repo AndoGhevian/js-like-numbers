@@ -5,6 +5,7 @@ Currently Supported for **ES6** and **higher**
 
 [![npm version](https://img.shields.io/npm/v/js-like-numbers.svg)](https://www.npmjs.com/package/js-like-numbers)
 [![npm downloads](https://img.shields.io/npm/dw/js-like-numbers)](https://www.npmjs.com/package/js-like-numbers)
+[![github issues](https://img.shields.io/github/issues/AndoGhevian/js-like-numbers)](https://github.com/AndoGhevian/js-like-numbers/issues)
 
 ## Install
 `$ npm install js-like-numbers`
@@ -31,7 +32,7 @@ const val2 = op(() => (
     + 111111111111.7891919191919191919191111111111111111
 ))
 
-console.log(String(val)) // 1
+console.log(val.toString()) // 1
 console.log(String(val2)) // 10000000000000000000055555555555666666666666.7891919191919191919191111111111111111
 ```
 As you see You can work with any numbers in javascript notation.
@@ -42,7 +43,7 @@ const val = op(function f() {
     return 128931823123712839213 % 13213212312
 })
 
-console.log(String(val)) // 449923381
+console.log(val.valueOf()) // 449923381
 ```
 **Requirement**: Your return statements **MUST** consists of arithmetic
 operations and include **ONLY** identifiers (variables) refering to **BigNumbers** as values:
@@ -54,14 +55,18 @@ const incorrectVal = 1
 const result2 = op(() => 1 + incorrectVal) // Error: You can use in return statement only variables initialized with BigNumber values
 ```
 **Requirement**: **op** call body **MUST** contain only simple arithmetics (not related to **BigNumbers**), declarations of **BigNumbers**, or another **op** calls.
-It **MUST** not contain any type castings related to **BigNumbers**. 
+
+**Requirement**: Type castings of **BigNumbers** in **op** functions bodies **MUST** be performed
+using **BigNumber.cast** method. 
 ```javascript
+const simpleNum = 2
 const num1 = op(() => 1)
 const result = op(function f() {
+  const simpleMath = 16 + 2 / simpleNum
   const num2 = op(() => (num1 + num1) ** 2)
-  const simpleMath = 16 + 2 / 2
   const num3 = new BigNumber(simpleMath + '')
   // const bigNumberStringCasting = num3.toString() // This is not allowed, it can lead to logical errors.
+  const validCasting = num3.cast('number')
   
   return num2 + 12 + num1 + (-num3) // 0
 })
