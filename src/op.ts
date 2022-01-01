@@ -30,18 +30,19 @@ function op(mathOp: TFunction): any {
 }
 
 function recursiveTraverse(ast: any): Big {
-  const bigNumbersArray = BigNumber['opArray'][BigNumber['opArray'].length - 1]
-  const bigNumberIndexesArray = BigNumber['bigNumberIndexesArray']
-  let left: any, right: any
   switch (ast.type) {
-    case 'Literal':
+    case 'Literal': {
       return Big(ast.raw)
-    case 'Identifier':
+    }
+    case 'Identifier': {
+      const bigNumbersArray = BigNumber['opArray'][BigNumber['opArray'].length - 1]
+      const bigNumberIndexesArray = BigNumber['bigNumberIndexesArray']
       const index = ++bigNumberIndexesArray[bigNumberIndexesArray.length - 1]
       if (index > bigNumbersArray.length - 1) throw new Error(`You can use in return statement only variables initialized with BigNumber values`)
       return bigNumbersArray[index]
-    case 'BinaryExpression':
-      ({ left, right } = ast);
+    }
+    case 'BinaryExpression': {
+      const { left, right } = ast;
       const binaryOperator: BinaryOperator = ast.operator
       const isValidOperator = Object.values(BinaryOperator).includes(binaryOperator)
       if (!isValidOperator) break
@@ -50,9 +51,12 @@ function recursiveTraverse(ast: any): Big {
         recursiveTraverse(right),
         binaryOperator
       )
-    case 'UnaryExpression':
-      right = ast.argument
+    }
+    case 'UnaryExpression': {
+      const right = ast.argument
       const unaryOperator: UnaryOperator = ast.operator
+      const isValidOperator = Object.values(UnaryOperator).includes(unaryOperator)
+      if (!isValidOperator) break
       switch (unaryOperator) {
         case UnaryOperator.Minus:
           return performMath(unaryOperator, recursiveTraverse(right))
@@ -62,7 +66,8 @@ function recursiveTraverse(ast: any): Big {
           break
       }
       break
-    case 'CallExpression':
+    }
+    case 'CallExpression': {
       const { callee } = ast
       const {
         type: calleeType,
@@ -76,14 +81,16 @@ function recursiveTraverse(ast: any): Big {
       if (objectName !== 'Math' || propertyName !== 'pow') {
         break
       }
-      ([left, right] = ast.arguments);
+      const [left, right] = ast.arguments;
       return performMath(
         recursiveTraverse(left),
         recursiveTraverse(right),
         BinaryOperator.Pow
       )
-    default:
+    }
+    default: {
       break
+    }
   }
   throw new Error('not supproted operation')
 }
