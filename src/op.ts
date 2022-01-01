@@ -1,6 +1,3 @@
-import jsep from 'jsep'
-import jsepAssignment from '@jsep-plugin/assignment'
-import jsepComment from '@jsep-plugin/comment'
 import Big from 'big.js'
 import {
   getReturnStatementAst,
@@ -9,9 +6,6 @@ import {
 import { BinaryOperator, UnaryOperator } from './enum'
 import BigNumber from './BigNumber'
 import { TFunction } from 'types'
-
-jsep.plugins.register(jsepAssignment as any)
-jsep.plugins.register(jsepComment as any)
 
 function op(mathOp: TFunction): any {
   try {
