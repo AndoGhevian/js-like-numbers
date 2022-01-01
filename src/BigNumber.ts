@@ -6,7 +6,12 @@ Big.DP = 1e+6
 
 export default class BigNumber {
     protected static opArray: Big[][] = []
-    protected static rightIndexArray: number[] = []
+    protected static bigNumberIndexesArray: number[] = []
+    protected static createFromBig(number: Big) {
+      const emptyBigNumber = new BigNumber('0')
+      emptyBigNumber.value = number
+      return emptyBigNumber
+    }
 
     protected value: Big;
     constructor(init: string | BigNumber) {

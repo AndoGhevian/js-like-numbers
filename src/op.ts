@@ -18,35 +18,30 @@ function op(mathOp: TFunction): any {
     BigNumber['opArray'].push([])
     String(mathOp())
 
-    BigNumber['rightIndexArray'].push(-1)
+    BigNumber['bigNumberIndexesArray'].push(-1)
     const ast = getReturnStatementAst(mathOp)
-    console.log(ast)
 
     const resultBig = recursiveTraverse(ast)
-    return new BigNumber(resultBig.valueOf())
+    return BigNumber['createFromBig'](resultBig)
   } finally {
     BigNumber['opArray'].pop()
-    BigNumber['rightIndexArray'].pop()
+    BigNumber['bigNumberIndexesArray'].pop()
   }
 }
 
 function recursiveTraverse(ast: any): Big {
-  const rightIndexCount = BigNumber['rightIndexArray'].length
+  const bigNumbersArray = BigNumber['opArray'][BigNumber['opArray'].length - 1]
+  const bigNumberIndexesArray = BigNumber['bigNumberIndexesArray']
   let left: any, right: any
   switch (ast.type) {
     case 'Literal':
       return Big(ast.raw)
     case 'Identifier':
-      BigNumber['rightIndexArray'][rightIndexCount - 1]++
-      const bigNumbersArray = BigNumber['opArray'][BigNumber['opArray'].length - 1]
-      const index = bigNumbersArray.length - 1 - BigNumber['rightIndexArray'][rightIndexCount - 1]
-      if (index < 0) throw new Error(`You can use in return statement only variables initialized with BigNumber values`)
+      const index = ++bigNumberIndexesArray[bigNumberIndexesArray.length - 1]
+      if (index > bigNumbersArray.length - 1) throw new Error(`You can use in return statement only variables initialized with BigNumber values`)
       return bigNumbersArray[index]
     case 'BinaryExpression':
       ({ left, right } = ast);
-      console.log('left')
-      console.log(left)
-      console.log()
       const binaryOperator: BinaryOperator = ast.operator
       const isValidOperator = Object.values(BinaryOperator).includes(binaryOperator)
       if (!isValidOperator) break
