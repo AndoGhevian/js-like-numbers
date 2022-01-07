@@ -1,6 +1,6 @@
 {
   "name": "js-like-numbers",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A small, fast JavaScript library for arbitrary-precision decimal arithmetic in javascript notation.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

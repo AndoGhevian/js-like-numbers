@@ -4,23 +4,20 @@ import { BinaryOperator, UnaryOperator } from "./enum"
 import { parseScript } from 'esprima'
 
 function getReturnStatementAst(func: TFunction) {
-    const funcStr = `(${String(func)})`
-    const { body: [ast] } = parseScript(funcStr)
-    let funcAst: any
-    switch (ast.type) {
-        case 'ExpressionStatement':
-            funcAst = ast.expression;
-            break
-        case 'FunctionDeclaration':
-            funcAst = ast;
-    }
+  const funcStr = `(${String(func)})`
+  const { body: [ast] } = parseScript(funcStr)
+  const expression = (ast as any).expression
 
-    if (funcAst.body.type === 'BlockStatement') {
-        const { body: funcBodyAst } = funcAst.body
-        const returnSTatementAst = funcBodyAst.find((statement: any) => statement.type === 'ReturnStatement')
-        return returnSTatementAst.argument
-    }
-    return funcAst.body
+  const isArrowFunction = ast.type === 'ExpressionStatement' && ast.expression.type === 'ArrowFunctionExpression'
+  if (!isArrowFunction) throw new Error('Provided function MUST be Lambda function without body block.')
+
+  const hasBodyBlock = expression.body.type === 'BlockStatement'
+  if (hasBodyBlock) throw new Error('Provided function MUST be Lambda function without body block.')
+
+  const hasArguments = expression.params.length
+  if(hasArguments)throw new Error('Provided function arguments list MUST be empty.')
+
+  return expression.body
 }
 
 function performMath(unaryOperator: UnaryOperator, operand: string | Big): Big

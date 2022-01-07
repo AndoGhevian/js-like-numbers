@@ -1,5 +1,5 @@
 # JS-Like-Numbers
-Currently Supported for **ES6** and **higher**
+Supported for **ES6** and **higher**
 
 **A small, fast JavaScript library for arbitrary-precision decimal arithmetic in javascript notation.**
 
