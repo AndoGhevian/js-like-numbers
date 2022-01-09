@@ -23,7 +23,7 @@ ES module:
 import { op } from 'js-like-numbers'
 ```
 
-You need to pass to **op** a function with returned aritmetic operation or a number
+You need to pass to **op** a **lambda** with returned aritmetic operation or a number
 ```javascript
 const val = op(() => 1)
 const val2 = op(() => (
@@ -37,15 +37,22 @@ console.log(String(val2)) // 10000000000000000000055555555555666666666666.789191
 ```
 As you see You can work with any numbers in javascript notation.
 
-Functions passed to **op** can also be _fat functions_:
+Function passed to **op** **MUST** be lambda function with no arguments, no function block bodies allowed, only functions like _() => (value)_
 ```javascript
-const val = op(function f() {
-    return 128931823123712839213 % 13213212312
-})
-
-console.log(val.valueOf()) // 449923381
+op(() => 1 + 111) // allowed
+op(() => (
+  1 + 111
+  * 11
+)) // allowed
+op(() => {
+  return 1
+}) // Not Allowed!
+op(function () {
+  return 1
+}) // Not Allowed!
 ```
-**Requirement**: Your return statements **MUST** consists of arithmetic
+
+Your return statements **MUST** consists of arithmetic
 operations and include **ONLY** identifiers (variables) refering to **BigNumbers** as values:
 ```javascript
 const val = op(() => 1)
@@ -54,23 +61,7 @@ const result1 = op(() => (1 + val * 10) / val ** (2 + val)) // Is Correct
 const incorrectVal = 1
 const result2 = op(() => 1 + incorrectVal) // Error: You can use in return statement only variables initialized with BigNumber values
 ```
-**Requirement**: **op** call body **MUST** contain only simple arithmetics (not related to **BigNumbers**), declarations of **BigNumbers**, or another **op** calls.
 
-**Requirement**: Type castings of **BigNumbers** in **op** functions bodies **MUST** be performed
-using **BigNumber.cast** method. 
-```javascript
-const simpleNum = 2
-const num1 = op(() => 1)
-const result = op(function f() {
-  const simpleMath = 16 + 2 / simpleNum
-  const num2 = op(() => (num1 + num1) ** 2)
-  const num3 = new BigNumber(simpleMath + '')
-  // const bigNumberStringCasting = num3.toString() // This is not allowed, it can lead to logical errors.
-  const validCasting = num3.cast('number')
-  
-  return num2 + 12 + num1 + (-num3) // 0
-})
-```
 When you use **exponentiation** operation **(\*\*)**, be sure to pass
 as a second operand integer number between **-1e+6** to **1e+6** inclusive.
 ```javascript
